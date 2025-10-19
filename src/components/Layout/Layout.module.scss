@@ -1,0 +1,12 @@
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #fafafa;
+}
+
+.main {
+  flex: 1;
+  padding-top: 24px;
+  padding-bottom: 24px;
+}

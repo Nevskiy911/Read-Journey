@@ -1,18 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { setAuthHeader, clearAuthHeader } from "../../api/axiosConfig";
-import {
-  registerUserApi,
-  loginUserApi,
-  logoutUserApi,
-} from "../../api/authApi";
+import { api, setAuthHeader, clearAuthHeader } from "../../api/axiosConfig";
 
+// REGISTER
 export const registerUser = createAsyncThunk(
   "auth/register",
   async (credentials, thunkAPI) => {
     try {
-      const data = await registerUserApi(credentials);
-      setAuthHeader(data.token);
-      return data;
+      const res = await api.post("/users/signup", credentials);
+      setAuthHeader(res.data.token);
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || "Registration error"
@@ -21,13 +19,16 @@ export const registerUser = createAsyncThunk(
   }
 );
 
+// LOGIN
 export const loginUser = createAsyncThunk(
   "auth/login",
   async (credentials, thunkAPI) => {
     try {
-      const data = await loginUserApi(credentials);
-      setAuthHeader(data.token);
-      return data;
+      const res = await api.post("/users/signin", credentials);
+      setAuthHeader(res.data.token);
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || "Login error"
@@ -36,15 +37,18 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+// LOGOUT
 export const logoutUser = createAsyncThunk(
   "auth/logout",
   async (_, thunkAPI) => {
     try {
-      await logoutUserApi();
+      await api.post("/users/signout");
       clearAuthHeader();
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Logout error"
+        error.response?.data?.message || "Logout failed"
       );
     }
   }

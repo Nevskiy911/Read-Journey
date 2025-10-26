@@ -4,6 +4,7 @@ import Navigation from "./Navigation/Navigation";
 import UserMenu from "./UserMenu/UserMenu";
 import s from "./Header.module.scss";
 import { logoutUser } from "../../redux/auth/authOperations";
+import Icon from "../Icon/Icon";
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -12,7 +13,14 @@ export default function Header() {
   return (
     <header className={s.header}>
       <Link to="/" className={s.logo}>
-        ReadJourney
+        <Icon
+          name="logo"
+          width={42}
+          height={17}
+          color="white"
+          fill="currentColor"
+        />
+        <span className={s.logoDescription}>Read Journey</span>{" "}
       </Link>
 
       <div className={s.navWrapper}>

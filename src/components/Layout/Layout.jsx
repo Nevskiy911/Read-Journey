@@ -1,9 +1,9 @@
-import { useLocation } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Header from "../Header/Header";
 import Container from "../Container/Container";
 import s from "./Layout.module.scss";
 
-export default function Layout({ children }) {
+export default function Layout() {
   const location = useLocation();
   const hideHeaderRoutes = ["/login", "/register"];
   const hideHeader = hideHeaderRoutes.includes(location.pathname);
@@ -12,7 +12,9 @@ export default function Layout({ children }) {
     <div className={s.wrapper}>
       {!hideHeader && <Header />}
       <main className={s.main}>
-        <Container>{children}</Container>
+        <Container>
+          <Outlet />
+        </Container>
       </main>
     </div>
   );

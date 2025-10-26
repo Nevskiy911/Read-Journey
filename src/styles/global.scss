@@ -1,0 +1,15 @@
+@use "./variables" as vars;
+@use "./mixins" as mix;
+@use "./reset";
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  background-color: vars.$color-bg;
+  font-family: vars.$font-family;
+  color: vars.$color-text;
+  height: 100%;
+}
+

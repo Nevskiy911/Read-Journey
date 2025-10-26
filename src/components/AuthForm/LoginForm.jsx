@@ -6,7 +6,7 @@ import { loginUser } from "../../redux/auth/authOperations";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import s from "./LoginForm.module.scss";
+import s from "./Form.module.scss";
 
 const schema = Yup.object({
   email: Yup.string()
@@ -52,16 +52,18 @@ export default function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
-      <h2>Log In</h2>
+      <h2>
+        Expand your mind, reading <span className={s.book}>a book</span>
+      </h2>
 
-      <label>
-        Email
+      <label className={s.label}>
+        Mail:
         <input type="email" {...register("email")} autoComplete="email" />
         {errors.email && <p className={s.error}>{errors.email.message}</p>}
       </label>
 
-      <label>
-        Password
+      <label className={s.label}>
+        Password:
         <input
           type="password"
           {...register("password")}
@@ -72,13 +74,14 @@ export default function LoginForm() {
         )}
       </label>
 
-      <button type="submit" disabled={isLoading}>
-        {isLoading ? "Loading..." : "Log In"}
-      </button>
-
-      <p>
-        Don’t have an account? <Link to="/register">Register</Link>
-      </p>
+      <div className={s.bottomForm}>
+        <button type="submit" disabled={isLoading} className={s.button}>
+          {isLoading ? "Loading..." : "Log In"}
+        </button>
+        <p className={s.text}>
+          <Link to="/register">Don’t have an account?</Link>
+        </p>
+      </div>
     </form>
   );
 }

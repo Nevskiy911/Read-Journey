@@ -1,7 +1,14 @@
+@use "../../../styles/variables" as vars;
+
 .navList {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 112%;
+  letter-spacing: -0.02em;
+  color: vars.$color-text;
+  gap: 40px;
   list-style: none;
 
   @media (max-width: 768px) {

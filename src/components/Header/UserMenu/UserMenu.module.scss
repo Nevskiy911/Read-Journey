@@ -1,11 +1,31 @@
+@use "../../../styles/variables" as vars;
+
 .menu {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 18px;
 
   @media (max-width: 768px) {
     flex-direction: column;
   }
+}
+
+.badge {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+  border: 1px solid vars.$color-description;
+  background: none;
+  width: 40px;
+  height: 40px;
+  color: vars.$color-description;
 }
 
 .username {
@@ -14,16 +34,20 @@
 }
 
 .logoutBtn {
-  padding: 6px 12px;
-  border: none;
-  border-radius: 8px;
-  background-color: #ef476f;
-  color: #fff;
-  font-weight: 500;
+  padding: 12px 28px;
+  border: 1px solid vars.$color-secondary;
+  border-radius: 30px;
+  background: none;
+  color: vars.$color-description;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 112%;
+  letter-spacing: 0.02em;
   cursor: pointer;
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #d43d61;
+    color: vars.$color-section-bg;
+    background-color: vars.$color-description;
   }
 }

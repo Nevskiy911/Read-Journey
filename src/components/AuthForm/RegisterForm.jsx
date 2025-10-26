@@ -7,8 +7,7 @@ import { toast } from "react-toastify";
 import { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
-// Імпорт SCSS модуля
-import s from "./RegisterForm.module.scss";
+import s from "./Form.module.scss";
 
 const schema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -49,35 +48,41 @@ export default function RegisterForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
-      <h2>Register</h2>
+      <h2>
+        Expand your mind, reading <span className={s.book}>a book</span>
+      </h2>
 
       <label className={s.label}>
         Name
-        <input type="text" {...register("name")} />
+        <input type="text" {...register("name")} autoComplete="name" />
         {errors.name && <p className={s.error}>{errors.name.message}</p>}
       </label>
 
       <label className={s.label}>
         Email
-        <input type="email" {...register("email")} />
+        <input type="email" {...register("email")} autoComplete="email" />
         {errors.email && <p className={s.error}>{errors.email.message}</p>}
       </label>
 
       <label className={s.label}>
         Password
-        <input type="password" {...register("password")} />
+        <input
+          type="password"
+          {...register("password")}
+          autoComplete="new-password"
+        />
         {errors.password && (
           <p className={s.error}>{errors.password.message}</p>
         )}
       </label>
-
-      <button type="submit" className={s.button} disabled={isLoading}>
-        {isLoading ? "Loading..." : "Register"}
-      </button>
-
-      <p className={s.text}>
-        Already have an account? <Link to="/login">Log In</Link>
-      </p>
+      <div className={s.bottomForm}>
+        <button type="submit" className={s.button} disabled={isLoading}>
+          {isLoading ? "Loading..." : "Register"}
+        </button>
+        <p className={s.text}>
+          <Link to="/login">Already have an account?</Link>
+        </p>
+      </div>
     </form>
   );
 }

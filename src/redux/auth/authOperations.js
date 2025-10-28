@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { api, setAuthHeader, clearAuthHeader } from "../../api/axiosConfig";
 
-// REGISTER
 export const registerUser = createAsyncThunk(
   "auth/register",
   async (credentials, thunkAPI) => {
@@ -19,7 +18,6 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-// LOGIN
 export const loginUser = createAsyncThunk(
   "auth/login",
   async (credentials, thunkAPI) => {
@@ -37,7 +35,6 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-// LOGOUT
 export const logoutUser = createAsyncThunk(
   "auth/logout",
   async (_, thunkAPI) => {
@@ -49,6 +46,29 @@ export const logoutUser = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || "Logout failed"
+      );
+    }
+  }
+);
+
+export const refreshUser = createAsyncThunk(
+  "auth/refreshUser",
+  async (_, thunkAPI) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return thunkAPI.rejectWithValue("No token found");
+    }
+
+    try {
+      setAuthHeader(token);
+      const res = await api.get("/users/current");
+      return res.data;
+    } catch (error) {
+      clearAuthHeader();
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Session expired"
       );
     }
   }

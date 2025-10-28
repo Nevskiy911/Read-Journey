@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import PrivateRoute from "./components/Auth/PrivateRoute";
@@ -10,14 +10,17 @@ import LibraryPage from "./pages/LibraryPage/LibraryPage";
 import ReadingPage from "./pages/ReadingPage/ReadingPage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import WelcomePage from "./pages/WelcomePage/WelcomePage";
-import { initAuth } from "./redux/auth/authSlice";
+import { refreshUser } from "./redux/auth/authOperations";
+
 export default function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(initAuth());
+    dispatch(refreshUser());
   }, [dispatch]);
+  const { isLoading } = useSelector((state) => state.auth);
 
+  if (isLoading) return <div>Loading...</div>;
   return (
     <BrowserRouter>
       <Routes>

@@ -1,0 +1,68 @@
+@use "../../../styles/variables" as vars;
+
+.field {
+  position: relative;
+  margin-bottom: 24px;
+  min-height: 56px;
+
+  h2 {
+    max-width: 440px;
+    text-align: start;
+    color: vars.$color-description;
+    font-weight: 700;
+    font-size: 64px;
+    line-height: 94%;
+    letter-spacing: 0.02em;
+    margin-top: 107px;
+    margin-bottom: 40px;
+
+    .book {
+      color: vars.$color-span;
+    }
+  }
+
+  .innerLabel {
+    position: absolute;
+    left: 16px;
+    top: 43%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    font-weight: 500;
+    color: vars.$color-text;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  input {
+    width: 100%;
+    padding: 16px 14px;
+    padding-left: calc(var(--label-width, 0px) + 10px + 16px);
+    font-size: 14px;
+    color: vars.$color-description;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    background-color: vars.$color-input-bg;
+    outline: none;
+    transition: all 0.3s ease;
+
+    &:focus,
+    &:hover {
+      border: 1px solid vars.$color-input-border;
+    }
+
+    &::placeholder {
+      color: transparent;
+    }
+  }
+
+  .error {
+    position: absolute;
+    bottom: -8px;
+    left: 14px;
+    color: vars.$color-red;
+    font-weight: 500;
+    font-size: 10px;
+    line-height: 120%;
+    letter-spacing: -0.02em;
+  }
+}

@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginUser, registerUser, logoutUser } from "./authOperations";
+import {
+  loginUser,
+  registerUser,
+  logoutUser,
+  refreshUser,
+} from "./authOperations";
 import { setAuthHeader } from "../../api/axiosConfig";
 
 const getUserFromStorage = () => {
@@ -83,7 +88,21 @@ const authSlice = createSlice({
         localStorage.removeItem("token");
         localStorage.removeItem("user");
       })
-      .addCase(logoutUser.rejected, handleRejected);
+      .addCase(logoutUser.rejected, handleRejected)
+      .addCase(refreshUser.pending, handlePending)
+      .addCase(refreshUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = action.payload;
+        state.isLoggedIn = true;
+        state.token = localStorage.getItem("token");
+        state.error = null;
+      })
+      .addCase(refreshUser.rejected, (state) => {
+        state.isLoading = false;
+        state.isLoggedIn = false;
+        state.user = null;
+        state.token = null;
+      });
   },
 });
 

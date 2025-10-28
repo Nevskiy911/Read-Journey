@@ -1,9 +1,12 @@
-$font-family: "Inter", sans-serif;
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&display=swap");
+
+$font-family: "Outfit", sans-serif;
 
 $color-bg: #141414;
 $color-description: #f9f9f9;
 $color-text: #686868;
 $color-input-bg: #262626;
+$color-input-border: rgba(249, 249, 249, 0.1);
 $color-section-bg: #1f1f1f;
 $color-secondary: rgba(227, 227, 227, 0.3);
 $color-span: rgba(227, 227, 227, 0.5);

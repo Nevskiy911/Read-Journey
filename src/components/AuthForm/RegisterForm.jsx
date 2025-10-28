@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 import s from "./Form.module.scss";
+import Field from "./Field/Field";
 
 const schema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -22,7 +23,6 @@ const schema = Yup.object({
 export default function RegisterForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const { isLoggedIn, error, isLoading } = useSelector((state) => state.auth);
 
   const {
@@ -31,9 +31,7 @@ export default function RegisterForm() {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const onSubmit = (data) => {
-    dispatch(registerUser(data));
-  };
+  const onSubmit = (data) => dispatch(registerUser(data));
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -52,32 +50,18 @@ export default function RegisterForm() {
         Expand your mind, reading <span className={s.book}>a book</span>
       </h2>
 
-      <label className={s.label}>
-        Name
-        <input type="text" {...register("name")} autoComplete="name" />
-        {errors.name && <p className={s.error}>{errors.name.message}</p>}
-      </label>
+      <Field label="Name:" register={register} error={errors.name} />
+      <Field label="Mail:" register={register} error={errors.email} />
+      <Field
+        label="Password:"
+        type="password"
+        register={register}
+        error={errors.password}
+      />
 
-      <label className={s.label}>
-        Email
-        <input type="email" {...register("email")} autoComplete="email" />
-        {errors.email && <p className={s.error}>{errors.email.message}</p>}
-      </label>
-
-      <label className={s.label}>
-        Password
-        <input
-          type="password"
-          {...register("password")}
-          autoComplete="new-password"
-        />
-        {errors.password && (
-          <p className={s.error}>{errors.password.message}</p>
-        )}
-      </label>
       <div className={s.bottomForm}>
         <button type="submit" className={s.button} disabled={isLoading}>
-          {isLoading ? "Loading..." : "Register"}
+          {isLoading ? "Loading..." : "Registration"}
         </button>
         <p className={s.text}>
           <Link to="/login">Already have an account?</Link>

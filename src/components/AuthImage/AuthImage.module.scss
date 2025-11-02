@@ -1,0 +1,49 @@
+@use "../../styles/variables" as vars;
+
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: vars.$color-section-bg;
+  border-radius: 30px;
+  padding: 60px 103px 0 103px;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+/* 📱 Mobile (<768px) — картинка під формою */
+@media (max-width: 767px) {
+  .wrapper {
+    order: 2; /* під формою */
+    margin-top: 32px;
+  }
+
+  .image {
+    height: 260px;
+    // border-radius: 30px;
+  }
+}
+
+/* 💻 Desktop (≥1440px) — справа */
+@media (min-width: 1440px) {
+  .wrapper {
+    max-width: 50%;
+  }
+
+  .image {
+    // border-radius: 0 30px 30px 0;
+  }
+}
+
+/* 🧾 Tablet (768px–1439px) — відсутня */
+@media (min-width: 768px) and (max-width: 1439px) {
+  .wrapper {
+    display: none;
+  }
+}

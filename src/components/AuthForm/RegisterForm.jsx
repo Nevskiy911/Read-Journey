@@ -6,9 +6,9 @@ import { registerUser } from "../../redux/auth/authOperations";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-
 import s from "./Form.module.scss";
 import Field from "./Field/Field";
+import Icon from "../Icon/Icon";
 
 const schema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -28,8 +28,13 @@ export default function RegisterForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) });
+    watch,
+    formState: { errors, isSubmitted, touchedFields },
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: "onBlur",
+    reValidateMode: "onChange",
+  });
 
   const onSubmit = (data) => dispatch(registerUser(data));
 
@@ -44,24 +49,62 @@ export default function RegisterForm() {
     if (error) toast.error(error);
   }, [error]);
 
+  const nameValue = watch("name");
+  const emailValue = watch("email");
+  const passwordValue = watch("password");
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
+      <div className={s.logoWrapper}>
+        <Icon
+          name="logo"
+          width={42}
+          height={17}
+          color="white"
+          fill="currentColor"
+          className={s.logo}
+        />
+        <span className={s.logoDescription}>Read Journey</span>
+      </div>
       <h2>
         Expand your mind, reading <span className={s.book}>a book</span>
       </h2>
 
-      <Field label="Name:" register={register} error={errors.name} />
-      <Field label="Mail:" register={register} error={errors.email} />
+      <Field
+        label="Name:"
+        name="name"
+        register={register}
+        error={touchedFields.name ? errors.name : null}
+        isValid={touchedFields.name && !errors.name && nameValue}
+        successText="Name looks good!"
+        autoComplete="name"
+      />
+
+      <Field
+        label="Mail:"
+        name="email"
+        register={register}
+        error={touchedFields.email ? errors.email : null}
+        isValid={touchedFields.email && !errors.email && emailValue}
+        successText="Email looks good!"
+        autoComplete="email"
+      />
+
       <Field
         label="Password:"
+        name="password"
         type="password"
         register={register}
         error={errors.password}
+        isValid={!errors.password && !!watch("password")}
+        successText="Password is secure!"
+        showValidation={isSubmitted}
+        autoComplete="new-password"
       />
 
       <div className={s.bottomForm}>
         <button type="submit" className={s.button} disabled={isLoading}>
-          {isLoading ? "Loading..." : "Registration"}
+          {isLoading ? "Loading..." : "Register"}
         </button>
         <p className={s.text}>
           <Link to="/login">Already have an account?</Link>

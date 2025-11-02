@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Field from "./Field/Field";
 import s from "./Form.module.scss";
+import Icon from "../Icon/Icon";
 
 const schema = Yup.object({
   email: Yup.string()
@@ -26,14 +27,15 @@ export default function LoginForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    watch,
+    formState: { errors, isSubmitted, touchedFields },
   } = useForm({
     resolver: yupResolver(schema),
+    mode: "onBlur",
+    reValidateMode: "onChange",
   });
 
-  const onSubmit = (data) => {
-    dispatch(loginUser(data));
-  };
+  const onSubmit = (data) => dispatch(loginUser(data));
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -48,16 +50,40 @@ export default function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
-      <h2>Welcome back!</h2>
-
-      <Field label="Mail:" register={register} error={errors.email} />
+      <div className={s.logoWrapper}>
+        <Icon
+          name="logo"
+          width={42}
+          height={17}
+          color="white"
+          fill="currentColor"
+          className={s.logo}
+        />
+        <span className={s.logoDescription}>Read Journey</span>
+      </div>
+      <h2>
+        Expand your mind, reading <span className={s.book}>a book</span>
+      </h2>
+      <Field
+        label="Mail:"
+        name="email"
+        register={register}
+        error={touchedFields.email ? errors.email : null}
+        isValid={touchedFields.email && !errors.email}
+        successText="Email looks good!"
+        autoComplete="email"
+      />
       <Field
         label="Password:"
+        name="password"
         type="password"
         register={register}
         error={errors.password}
+        isValid={!errors.password && !!watch("password")}
+        successText="Password is secure!"
+        showValidation={isSubmitted}
+        autoComplete="current-password"
       />
-
       <div className={s.bottomForm}>
         <button type="submit" className={s.button} disabled={isLoading}>
           {isLoading ? "Loading..." : "Log In"}

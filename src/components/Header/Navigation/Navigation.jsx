@@ -6,7 +6,7 @@ export default function Navigation({ isLoggedIn }) {
     <ul className={s.navList}>
       <li>
         <NavLink
-          to="/"
+          to="/recommended"
           className={({ isActive }) => (isActive ? s.active : s.link)}
         >
           Home

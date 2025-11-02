@@ -1,0 +1,61 @@
+@use "../../styles/mixins" as mix;
+@use "../../styles/variables" as vars;
+
+.container {
+  display: flex;
+  align-items: stretch; // висота однакова
+  gap: 16px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @include mix.tablet {
+    flex-direction: column;
+  }
+
+  @include mix.mobile {
+    flex-direction: column;
+  }
+}
+
+.formContainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  form {
+    padding: 40px 64px; // внутрішні падінги форми
+    width: 100%;
+    max-width: 600px;
+    box-sizing: border-box;
+  }
+
+  @include mix.mobile {
+    order: 1;
+    width: 100%;
+  }
+}
+
+.AuthImage {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: stretch; // щоб img займало всю висоту контейнера
+
+  img {
+    width: 100%;
+    height: 100%; // ключова зміна
+    object-fit: cover;
+    border-radius: 30px;
+
+    @include mix.mobile {
+      height: 260px;
+      border-radius: 14px;
+    }
+  }
+
+  @include mix.tablet {
+    display: none;
+  }
+}

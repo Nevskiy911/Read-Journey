@@ -1,4 +1,4 @@
-@use "../../styles/variables.scss" as vars;
+@use "../../styles/variables" as vars;
 @use "../../styles/mixins" as mix;
 
 .header {
@@ -12,6 +12,7 @@
   top: 0;
   z-index: 1000;
   border-radius: 15px;
+  margin-bottom: 16px;
 
   @include mix.mobile {
     padding: 11px 20px;
@@ -20,28 +21,26 @@
 
 .logo {
   display: flex;
+  align-items: center;
   color: vars.$color-description;
   font-size: 18px;
   font-weight: 700;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   text-decoration: none;
-  align-items: center;
 
-  @media (max-width: 768px) {
+  @include mix.mobile {
     margin-bottom: 0.75rem;
   }
 }
 
-.logoDescription {
-}
 .navWrapper {
   width: 668px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  @media (max-width: 768px) {
+  @include mix.mobile {
     flex-direction: column;
     width: 100%;
     gap: 1rem;

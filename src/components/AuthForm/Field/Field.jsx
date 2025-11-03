@@ -1,76 +1,7 @@
-// import { useRef, useEffect, useState } from "react";
-// import s from "./Field.module.scss";
-// import sprite from "../../../assets/icons/sprite.svg";
-
-// export default function Field({
-//   label,
-//   name,
-//   type = "text",
-//   register,
-//   error,
-//   isValid,
-//   successText,
-//   autoComplete,
-// }) {
-//   const [showPassword, setShowPassword] = useState(false);
-//   const labelRef = useRef(null);
-//   const inputContainerRef = useRef(null);
-
-//   useEffect(() => {
-//     if (labelRef.current && inputContainerRef.current) {
-//       const width = labelRef.current.offsetWidth;
-//       inputContainerRef.current.style.setProperty(
-//         "--label-width",
-//         `${width}px`
-//       );
-//     }
-//   }, []);
-
-//   const togglePassword = () => setShowPassword((prev) => !prev);
-
-//   return (
-//     <div
-//       ref={inputContainerRef}
-//       className={`${s.field} ${error ? s.errorField : ""} ${
-//         isValid ? s.successField : ""
-//       }`}
-//     >
-//       <span className={s.innerLabel} ref={labelRef}>
-//         {label}
-//       </span>
-
-//       <input
-//         type={type}
-//         {...register(name)}
-//         name={name}
-//         autoComplete={autoComplete || "off"}
-//       />
-
-//       {type === "password" && (
-//         <svg className={s.togglePassword} onClick={togglePassword}>
-//           <use href={`${sprite}#${showPassword ? "eyeoff" : "eye"}`} />
-//         </svg>
-//       )}
-
-//       {error && (
-//         <svg className={`${s.icon} ${s.errorIcon}`}>
-//           <use href={`${sprite}#error`} />
-//         </svg>
-//       )}
-//       {isValid && (
-//         <svg className={`${s.icon} ${s.successIcon}`}>
-//           <use href={`${sprite}#gg`} />
-//         </svg>
-//       )}
-
-//       {error && <p className={s.error}>{error.message}</p>}
-//       {isValid && successText && <p className={s.success}>{successText}</p>}
-//     </div>
-//   );
-// }
 import { useRef, useEffect, useState } from "react";
 import s from "./Field.module.scss";
 import sprite from "../../../assets/icons/sprite.svg";
+
 export default function Field({
   label,
   name,
@@ -79,12 +10,15 @@ export default function Field({
   error,
   isValid,
   successText,
+  showValidation = false,
+  trigger,
   autoComplete,
-  showValidation = false, // новий прапорець
 }) {
-  const [showPassword, setShowPassword] = useState(false);
   const labelRef = useRef(null);
   const inputContainerRef = useRef(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [wasBlurred, setWasBlurred] = useState(false);
 
   useEffect(() => {
     if (labelRef.current && inputContainerRef.current) {
@@ -96,53 +30,74 @@ export default function Field({
     }
   }, []);
 
-  const togglePassword = () => setShowPassword((prev) => !prev);
+  const togglePassword = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowPassword((prev) => !prev);
+  };
 
-  const isPasswordField = type === "password";
+  const handleFocus = () => {
+    setIsFocused(true);
+    setWasBlurred(false);
+  };
+
+  const handleBlur = async () => {
+    setIsFocused(false);
+    setWasBlurred(true);
+    if (trigger) await trigger(name);
+  };
+
+  const shouldShowValidation = showValidation || (wasBlurred && !isFocused);
 
   return (
     <div
       ref={inputContainerRef}
-      className={`${s.field} ${error ? s.errorField : ""} ${
-        isValid ? s.successField : ""
-      }`}
+      className={`${s.field} ${
+        shouldShowValidation && error ? s.errorField : ""
+      } ${shouldShowValidation && isValid ? s.successField : ""}`}
     >
       <span className={s.innerLabel} ref={labelRef}>
         {label}
       </span>
 
       <input
-        type={type === "password" ? (showPassword ? "text" : "password") : type}
+        type={type === "password" && showPassword ? "text" : type}
         {...register(name)}
         name={name}
-        autoComplete={type === "password" ? "current-password" : "username"}
+        autoComplete={autoComplete || "off"}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
       />
 
-      {/* Очі для пароля завжди */}
-      {type === "password" && (
+      {type === "password" && (isFocused || showPassword) && (
         <svg
           className={s.togglePassword}
-          onClick={() => setShowPassword((p) => !p)}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            setShowPassword((prev) => !prev);
+          }}
         >
           <use href={`${sprite}#${showPassword ? "eyeoff" : "eye"}`} />
         </svg>
       )}
 
-      {/* Іконки валідності */}
-      {error && (
+      {shouldShowValidation && error && (
         <svg className={`${s.icon} ${s.errorIcon}`}>
           <use href={`${sprite}#error`} />
         </svg>
       )}
-      {isValid && successText && (
+      {shouldShowValidation && !error && isValid && (
         <svg className={`${s.icon} ${s.successIcon}`}>
           <use href={`${sprite}#gg`} />
         </svg>
       )}
 
-      {/* Текст помилки/успіху */}
-      {error && <p className={s.error}>{error.message}</p>}
-      {isValid && successText && <p className={s.success}>{successText}</p>}
+      {shouldShowValidation && error && (
+        <p className={s.error}>{error.message}</p>
+      )}
+      {shouldShowValidation && isValid && successText && (
+        <p className={s.success}>{successText}</p>
+      )}
     </div>
   );
 }

@@ -1,14 +1,10 @@
 @use "../../styles/variables" as vars;
 
 .wrapper {
-  // min-height: 100vh;
+  min-width: 1440px;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: vars.$color-bg;
   padding: 32px 32px 27px 32px;
-}
-
-.main {
-  flex: 1;
 }

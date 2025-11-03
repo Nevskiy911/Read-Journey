@@ -4,16 +4,14 @@
 .wrapper {
   background-color: vars.$color-section-bg;
   border-radius: 30px;
-  padding: 40px;
+  padding: 40px 40px 28px;
   width: 100%;
-  max-width: 847px;
-  margin: 0 auto;
 }
 
 .list {
   display: grid;
   gap: 20px 27px;
-  justify-content: center;
+  // justify-content: center;
 
   @include mixins.desktop {
     grid-template-columns: repeat(5, 1fr);
@@ -28,15 +26,64 @@
     overflow: hidden;
   }
 }
+.title {
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 114%;
+  letter-spacing: 0.02em;
+  color: vars.$color-description;
+}
 
-.book {
-  width: 137px;
-  text-align: center;
+.top {
+  display: flex;
+  justify-content: space-between;
 }
 
 .pagination {
   display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.pageBtn {
+  display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 1rem;
-  margin-top: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(249, 249, 249, 0.2);
+}
+
+.book {
+  width: 137px;
+}
+
+.img {
+  width: 100%;
+  border-radius: 8px;
+  height: 208px;
+}
+
+.bookTitle {
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 129%;
+  letter-spacing: -0.02em;
+  color: vars.$color-description;
+  margin-top: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  width: 100%;
+}
+
+.bookAuthor {
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 120%;
+  letter-spacing: -0.02em;
+  color: vars.$color-text;
+  margin-top: 2px;
 }

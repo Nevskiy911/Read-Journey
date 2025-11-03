@@ -1,0 +1,33 @@
+@use "../../styles/variables" as vars;
+@use "../../styles/mixins" as mixins;
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+
+  select,
+  input {
+    background-color: transparent;
+    border: 1px solid rgba(249, 249, 249, 0.3);
+    color: vars.$color-description;
+    border-radius: 12px;
+    padding: 8px 12px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      border-color: vars.$color-accent;
+    }
+
+    &::placeholder {
+      color: rgba(249, 249, 249, 0.5);
+    }
+  }
+
+  @include mixins.mobile {
+    flex-direction: column;
+  }
+}

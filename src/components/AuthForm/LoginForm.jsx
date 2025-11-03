@@ -6,16 +6,16 @@ import { loginUser } from "../../redux/auth/authOperations";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import Field from "./Field/Field";
 import s from "./Form.module.scss";
+import Field from "./Field/Field";
 import Icon from "../Icon/Icon";
 
 const schema = Yup.object({
   email: Yup.string()
-    .matches(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/, "Invalid email")
+    .email("Invalid email format")
     .required("Email is required"),
   password: Yup.string()
-    .min(7, "Min 7 characters")
+    .min(7, "Minimum 7 characters")
     .required("Password is required"),
 });
 
@@ -28,11 +28,11 @@ export default function LoginForm() {
     register,
     handleSubmit,
     watch,
-    formState: { errors, isSubmitted, touchedFields },
+    trigger,
+    formState: { errors, isSubmitted },
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onBlur",
-    reValidateMode: "onChange",
   });
 
   const onSubmit = (data) => dispatch(loginUser(data));
@@ -48,6 +48,9 @@ export default function LoginForm() {
     if (error) toast.error(error);
   }, [error]);
 
+  const emailValue = watch("email");
+  const passwordValue = watch("password");
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
       <div className={s.logoWrapper}>
@@ -61,29 +64,36 @@ export default function LoginForm() {
         />
         <span className={s.logoDescription}>Read Journey</span>
       </div>
+
       <h2>
         Expand your mind, reading <span className={s.book}>a book</span>
       </h2>
+
       <Field
         label="Mail:"
         name="email"
         register={register}
-        error={touchedFields.email ? errors.email : null}
-        isValid={touchedFields.email && !errors.email}
-        successText="Email looks good!"
+        trigger={trigger}
+        error={errors.email}
+        isValid={!errors.email && !!emailValue}
+        successText="Email looks valid!"
         autoComplete="email"
+        showValidation={isSubmitted}
       />
+
       <Field
         label="Password:"
         name="password"
         type="password"
         register={register}
+        trigger={trigger}
         error={errors.password}
-        isValid={!errors.password && !!watch("password")}
+        isValid={!errors.password && !!passwordValue}
         successText="Password is secure!"
-        showValidation={isSubmitted}
         autoComplete="current-password"
+        showValidation={isSubmitted}
       />
+
       <div className={s.bottomForm}>
         <button type="submit" className={s.button} disabled={isLoading}>
           {isLoading ? "Loading..." : "Log In"}

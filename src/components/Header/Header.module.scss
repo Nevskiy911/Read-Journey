@@ -2,6 +2,7 @@
 @use "../../styles/mixins" as mix;
 
 .header {
+  width: 100%;
   background-color: vars.$color-section-bg;
   height: 74px;
   padding: 16px;

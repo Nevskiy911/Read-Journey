@@ -52,7 +52,6 @@
   transform: translateY(0);
   pointer-events: auto;
 
-  // планшет — плавно зникає
   @include mix.tablet {
     opacity: 0;
     transform: translateY(-30px);

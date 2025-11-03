@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../../api/axiosConfig";
 import s from "./Recommended.module.scss";
+import Icon from "../Icon/Icon";
 
 export default function Recommended() {
   const [books, setBooks] = useState([]);
@@ -9,13 +10,11 @@ export default function Recommended() {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  // 🧠 Визначаємо ліміт залежно від ширини екрана
   const getLimitByScreen = () => {
     const width = window.innerWidth;
-    if (width >= 1440) return 10; // desktop (2 рядки по 5)
-    if (width >= 1024) return 8; // tablet (2 рядки по 4)
-    if (width >= 768) return 6; // small tablet (2 рядки по 3)
-    return 2; // mobile (1 рядок по 2)
+    if (width >= 1440) return 10;
+    if (width >= 768) return 8;
+    return 2;
   };
 
   useEffect(() => {
@@ -30,7 +29,6 @@ export default function Recommended() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // 🧠 Завантаження даних
   useEffect(() => {
     const fetchPage = async () => {
       setLoading(true);
@@ -61,43 +59,59 @@ export default function Recommended() {
         <p>Loading...</p>
       ) : (
         <>
+          <div className={s.top}>
+            <h2 className={s.title}>Recommended</h2>
+            <div className={s.pagination}>
+              <button
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page <= 1}
+                className={s.pageBtn}
+              >
+                <Icon
+                  name="left"
+                  width={20}
+                  height={20}
+                  color={page <= 1 ? "rgba(249, 249, 249, 0.2)" : "#f9f9f9"}
+                />
+              </button>
+
+              <button
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={page >= totalPages}
+                className={s.pageBtn}
+              >
+                <Icon
+                  name="right"
+                  width={20}
+                  height={20}
+                  color={
+                    page >= totalPages ? "rgba(249, 249, 249, 0.2)" : "#f9f9f9"
+                  }
+                />
+              </button>
+            </div>
+          </div>
+
           <ul className={s.list}>
             {books.length > 0 ? (
               books.map((b) => (
                 <li key={b._id} className={s.book}>
                   <img
+                    className={s.img}
                     src={b.imageUrl}
                     alt={b.title}
                     width="120"
                     height="180"
                     loading="lazy"
                   />
-                  <h3>{b.title}</h3>
-                  <p>{b.author}</p>
+                  <h3 className={s.bookTitle}>{b.title}</h3>
+                  <p className={s.bookAuthor}>{b.author}</p>
                 </li>
               ))
             ) : (
               <p>No books available</p>
             )}
           </ul>
-
-          <div className={s.pagination}>
-            <button
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={page <= 1}
-            >
-              Prev
-            </button>
-            <span>
-              {page} / {totalPages}
-            </span>
-            <button
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              disabled={page >= totalPages}
-            >
-              Next
-            </button>
-          </div>
         </>
       )}
     </section>

@@ -13,10 +13,10 @@ import Icon from "../Icon/Icon";
 const schema = Yup.object({
   name: Yup.string().required("Name is required"),
   email: Yup.string()
-    .matches(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/, "Invalid email")
+    .email("Invalid email format")
     .required("Email is required"),
   password: Yup.string()
-    .min(7, "Min 7 characters")
+    .min(7, "Minimum 7 characters")
     .required("Password is required"),
 });
 
@@ -29,11 +29,11 @@ export default function RegisterForm() {
     register,
     handleSubmit,
     watch,
-    formState: { errors, isSubmitted, touchedFields },
+    trigger,
+    formState: { errors, isSubmitted },
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onBlur",
-    reValidateMode: "onChange",
   });
 
   const onSubmit = (data) => dispatch(registerUser(data));
@@ -66,6 +66,7 @@ export default function RegisterForm() {
         />
         <span className={s.logoDescription}>Read Journey</span>
       </div>
+
       <h2>
         Expand your mind, reading <span className={s.book}>a book</span>
       </h2>
@@ -74,20 +75,24 @@ export default function RegisterForm() {
         label="Name:"
         name="name"
         register={register}
-        error={touchedFields.name ? errors.name : null}
-        isValid={touchedFields.name && !errors.name && nameValue}
-        successText="Name looks good!"
+        trigger={trigger}
+        error={errors.name}
+        isValid={!errors.name && !!nameValue}
+        successText="Looks good!"
         autoComplete="name"
+        showValidation={isSubmitted}
       />
 
       <Field
         label="Mail:"
         name="email"
         register={register}
-        error={touchedFields.email ? errors.email : null}
-        isValid={touchedFields.email && !errors.email && emailValue}
-        successText="Email looks good!"
+        trigger={trigger}
+        error={errors.email}
+        isValid={!errors.email && !!emailValue}
+        successText="Email looks valid!"
         autoComplete="email"
+        showValidation={isSubmitted}
       />
 
       <Field
@@ -95,11 +100,11 @@ export default function RegisterForm() {
         name="password"
         type="password"
         register={register}
+        trigger={trigger}
         error={errors.password}
-        isValid={!errors.password && !!watch("password")}
-        successText="Password is secure!"
+        isValid={!errors.password && !!passwordValue}
+        successText="Strong password!"
         showValidation={isSubmitted}
-        autoComplete="new-password"
       />
 
       <div className={s.bottomForm}>

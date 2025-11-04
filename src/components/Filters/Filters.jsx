@@ -1,49 +1,67 @@
-import { useState, useEffect } from "react";
 import s from "./Filters.module.scss";
+import Icon from "../Icon/Icon";
 
-export default function Filters({ onFilterChange }) {
-  const [filters, setFilters] = useState({
-    genre: "",
-    author: "",
-    year: "",
-  });
-
-  // 🔄 Викликає колбек при зміні будь-якого фільтра
-  useEffect(() => {
-    onFilterChange(filters);
-  }, [filters, onFilterChange]);
-
-  const handleChange = (e) => {
+export default function Filters({ filters, onChange }) {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFilters((prev) => ({ ...prev, [name]: value }));
+    onChange({ [name]: value });
   };
 
   return (
-    <div className={s.filters}>
-      <select name="genre" value={filters.genre} onChange={handleChange}>
-        <option value="">All genres</option>
-        <option value="Fiction">Fiction</option>
-        <option value="Fantasy">Fantasy</option>
-        <option value="History">History</option>
-        <option value="Romance">Romance</option>
-        <option value="Science">Science</option>
-      </select>
+    <div className={s.wrapper}>
+      <div className={s.field}>
+        <label htmlFor="title" className={s.label}>
+          Title:
+        </label>
+        <div className={s.inputWrapper}>
+          <input
+            id="title"
+            name="title"
+            type="text"
+            placeholder="Enter book title"
+            value={filters.title}
+            onChange={handleInputChange}
+            className={s.input}
+            autoComplete="off"
+          />
+          {filters.title && (
+            <button
+              type="button"
+              onClick={() => onChange({ title: "" })}
+              className={s.clearBtn}
+            >
+              <Icon name="close" width={16} height={16} color="#9A9A9A" />
+            </button>
+          )}
+        </div>
+      </div>
 
-      <input
-        type="text"
-        name="author"
-        placeholder="Author"
-        value={filters.author}
-        onChange={handleChange}
-      />
-
-      <input
-        type="number"
-        name="year"
-        placeholder="Year"
-        value={filters.year}
-        onChange={handleChange}
-      />
+      <div className={s.field}>
+        <label htmlFor="author" className={s.label}>
+          Author:
+        </label>
+        <div className={s.inputWrapper}>
+          <input
+            id="author"
+            name="author"
+            type="text"
+            placeholder="Enter author name"
+            value={filters.author}
+            onChange={handleInputChange}
+            className={s.input}
+            autoComplete="off"
+          />
+          {filters.author && (
+            <button
+              type="button"
+              onClick={() => onChange({ author: "" })}
+              className={s.clearBtn}
+            >
+              <Icon name="close" width={16} height={16} color="#9A9A9A" />
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
